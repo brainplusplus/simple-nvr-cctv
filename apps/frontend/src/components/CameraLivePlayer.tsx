@@ -13,6 +13,7 @@ interface CameraLivePlayerProps {
     muted?: boolean;
     preferLowLatency?: boolean;
     allowFallback?: boolean;
+    onFallback?: () => void;
     style?: React.CSSProperties;
 }
 
@@ -26,6 +27,7 @@ const CameraLivePlayer: React.FC<CameraLivePlayerProps> = ({
     muted = true,
     preferLowLatency = false,
     allowFallback = true,
+    onFallback,
     style,
 }) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -121,6 +123,7 @@ const CameraLivePlayer: React.FC<CameraLivePlayerProps> = ({
                         closePeer();
                         if (allowFallback) {
                             setTransport('fallback');
+                            onFallback?.();
                         }
                         setShowLoading(false);
                     }
@@ -140,6 +143,7 @@ const CameraLivePlayer: React.FC<CameraLivePlayerProps> = ({
                 if (!closed) {
                     if (allowFallback) {
                         setTransport('fallback');
+                        onFallback?.();
                     }
                     setShowLoading(false);
                 }
@@ -152,6 +156,7 @@ const CameraLivePlayer: React.FC<CameraLivePlayerProps> = ({
             if (!closed) {
                 if (allowFallback) {
                     setTransport('fallback');
+                    onFallback?.();
                 }
                 setShowLoading(false);
             }
@@ -170,7 +175,7 @@ const CameraLivePlayer: React.FC<CameraLivePlayerProps> = ({
                 video.srcObject = null;
             }
         };
-    }, [allowFallback, autoPlay, cameraId, preferLowLatency, transport]);
+    }, [allowFallback, autoPlay, cameraId, onFallback, preferLowLatency, transport]);
 
     if (transport === 'fallback') {
         return (

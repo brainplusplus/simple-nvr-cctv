@@ -150,6 +150,10 @@
             "id": "Stream live tidak tersedia. Cek RTSP atau status kamera.",
             "en": "Live stream is unavailable. Check the RTSP URL or camera status."
         },
+        "live_webrtc_fallback": {
+            "id": "WebRTC tidak stabil di kamera ini, dialihkan ke mode kompatibel.",
+            "en": "WebRTC is unstable for this camera, switched to compatible mode."
+        },
         "player": {
             "id": "Pemutar Rekaman",
             "en": "Recording Player"

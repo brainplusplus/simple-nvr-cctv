@@ -13,7 +13,7 @@ const CameraDetailPage: React.FC = () => {
     const { id = '' } = useParams();
     const { t } = useTranslation('cameras');
     const { t: tGeneral } = useTranslation('general');
-    const { error, success } = useToast();
+    const { error, success, warning } = useToast();
 
     const [camera, setCamera] = useState<CameraResponse | null>(null);
     const [recordings, setRecordings] = useState<RecordingFile[]>([]);
@@ -95,6 +95,15 @@ const CameraDetailPage: React.FC = () => {
             return;
         }
     }, [activeRecording, error, id, load, selectedRecordings, success, t]);
+
+    const handleWebRTCFallback = useCallback(() => {
+        if (liveMode !== 'low-latency') {
+            return;
+        }
+
+        setLiveMode('compatible');
+        warning(t('detail.live_webrtc_fallback'));
+    }, [liveMode, t, warning]);
 
     const columns = useMemo<Column<RecordingFile>[]>(() => [
         { key: 'filename', label: t('recordings.filename'), sortable: true },
@@ -180,6 +189,7 @@ const CameraDetailPage: React.FC = () => {
                                 muted={true}
                                 preferLowLatency={liveMode === 'low-latency'}
                                 allowFallback={liveMode !== 'low-latency'}
+                                onFallback={handleWebRTCFallback}
                                 emptyLabel={t('detail.live_empty')}
                                 errorLabel={t('detail.live_unavailable')}
                                 style={{ minHeight: '320px' }}
