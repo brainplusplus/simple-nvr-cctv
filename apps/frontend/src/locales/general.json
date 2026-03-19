@@ -1,0 +1,156 @@
+{
+    "button": {
+        "add": {
+            "id": "Tambah",
+            "en": "Add"
+        },
+        "edit": {
+            "id": "Ubah",
+            "en": "Edit"
+        },
+        "delete": {
+            "id": "Hapus",
+            "en": "Delete"
+        },
+        "save": {
+            "id": "Simpan",
+            "en": "Save"
+        },
+        "cancel": {
+            "id": "Batal",
+            "en": "Cancel"
+        },
+        "back": {
+            "id": "Kembali",
+            "en": "Back"
+        },
+        "filters": {
+            "id": "Pencarian",
+            "en": "Filters"
+        },
+        "columns": {
+            "id": "Kolom-Kolom",
+            "en": "Columns"
+        },
+        "settings": {
+            "id": "Pengaturan",
+            "en": "Settings"
+        },
+        "reset": {
+            "id": "Reset",
+            "en": "Reset"
+        },
+        "apply_filters": {
+            "id": "Terapkan Pencarian",
+            "en": "Apply Filters"
+        },
+        "clear_all": {
+            "id": "Bersihkan Semua",
+            "en": "Clear All"
+        }
+    },
+    "datatables": {
+        "rows_per_page": {
+            "id": "Baris Per Halaman",
+            "en": "Rows Per Page"
+        },
+        "showing_of": {
+            "id": "Menampilkan {{start}}-{{end}} Dari {{total}}",
+            "en": "Showing {{start}}-{{end}} of {{total}}"
+        },
+        "actions": {
+            "id": "Aksi",
+            "en": "Actions"
+        },
+        "no": {
+            "id": "No",
+            "en": "No"
+        },
+        "empty_message": {
+            "id": "Tidak ada data ditemukan.",
+            "en": "No data found."
+        },
+        "loading": {
+            "id": "Memuat...",
+            "en": "Loading..."
+        },
+        "visible_columns": {
+            "id": "Kolom Terlihat",
+            "en": "Visible Columns"
+        }
+    },
+    "topbar": {
+        "change_password": {
+            "id": "Ubah Password",
+            "en": "Change Password"
+        },
+        "logout": {
+            "id": "Keluar",
+            "en": "Logout"
+        },
+        "welcome_back": {
+            "id": "Selamat Datang Kembali !",
+            "en": "Welcome Back !"
+        }
+    },
+    "footer": {
+        "copyright": {
+            "id": "Copyright © {{year}} {{name}}. All rights reserved.",
+            "en": "Copyright © {{year}} {{name}}. All rights reserved."
+        }
+    },
+    "logic": {
+        "and": {
+            "id": "DAN",
+            "en": "AND"
+        },
+        "or": {
+            "id": "ATAU",
+            "en": "OR"
+        }
+    },
+    "columns": {
+        "user": {
+            "id": "Pengguna",
+            "en": "User"
+        },
+        "email": {
+            "id": "Email",
+            "en": "Email"
+        },
+        "role": {
+            "id": "Peran",
+            "en": "Role"
+        },
+        "name": {
+            "id": "Nama",
+            "en": "Name"
+        },
+        "status": {
+            "id": "Status",
+            "en": "Status"
+        },
+        "created_at": {
+            "id": "Dibuat Pada",
+            "en": "Created At"
+        },
+        "updated_at": {
+            "id": "Diperbarui Pada",
+            "en": "Updated At"
+        },
+        "language": {
+            "id": "Bahasa",
+            "en": "Language"
+        }
+    },
+    "status": {
+        "active": {
+            "id": "Aktif",
+            "en": "Active"
+        },
+        "inactive": {
+            "id": "Tidak Aktif",
+            "en": "Inactive"
+        }
+    }
+}

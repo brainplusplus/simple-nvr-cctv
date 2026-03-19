@@ -1,0 +1,74 @@
+{
+    "dashboard": {
+        "id": "Dashboard",
+        "en": "Dashboard"
+    },
+    "users": {
+        "id": "Pengguna",
+        "en": "Users"
+    },
+    "companies": {
+        "id": "Perusahaan",
+        "en": "Companies"
+    },
+    "upload_cutoffs": {
+        "id": "Unggah Cutoff",
+        "en": "Upload Cutoffs"
+    },
+    "cutoff_list": {
+        "id": "Daftar Cutoff",
+        "en": "Cutoff List"
+    },
+    "rus_taxes": {
+        "id": "Pajak RUS",
+        "en": "RUS Taxes"
+    },
+    "rus_details": {
+        "id": "Detail RUS",
+        "en": "RUS Details"
+    },
+    "dispute_taxes": {
+        "id": "Sengketa Pajak",
+        "en": "Dispute Taxes"
+    },
+    "persons": {
+        "id": "Orang",
+        "en": "Persons"
+    },
+    "background_jobs": {
+        "id": "Proses Latar Belakang",
+        "en": "Background Jobs"
+    },
+    "cameras": {
+        "id": "Kamera",
+        "en": "Cameras"
+    },
+    "favorites": {
+        "id": "Favorit",
+        "en": "Favorites"
+    },
+    "watchlists": {
+        "id": "Pantauan",
+        "en": "Watchlists"
+    },
+    "data_management": {
+        "id": "Manajemen Data",
+        "en": "Data Management"
+    },
+    "cutoff_management": {
+        "id": "Manajemen Cutoff",
+        "en": "Cutoff Management"
+    },
+    "rus_dispute": {
+        "id": "RUS & Sengketa",
+        "en": "RUS & Disputes"
+    },
+    "system_monitoring": {
+        "id": "Sistem / Monitoring",
+        "en": "System / Monitoring"
+    },
+    "favorites_group": {
+        "id": "Favorit",
+        "en": "Favorites"
+    }
+}

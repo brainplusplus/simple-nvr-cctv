@@ -1,0 +1,74 @@
+{
+    "title": {
+        "id": "Pengaturan Tabel",
+        "en": "Table Settings"
+    },
+    "rows_per_page": {
+        "id": "Baris per halaman",
+        "en": "Rows per page"
+    },
+    "showing_of": {
+        "id": "Menampilkan {{start}}-{{end}} dari {{total}}",
+        "en": "Showing {{start}}-{{end}} of {{total}}"
+    },
+    "no": {
+        "id": "No",
+        "en": "No"
+    },
+    "actions": {
+        "id": "Aksi",
+        "en": "Actions"
+    },
+    "loading": {
+        "id": "Memuat data...",
+        "en": "Loading data..."
+    },
+    "empty_message": {
+        "id": "Tidak ada data yang tersedia",
+        "en": "No data available"
+    },
+    "button_columns": {
+        "id": "Kolom",
+        "en": "Columns"
+    },
+    "button_settings": {
+        "id": "Pengaturan",
+        "en": "Settings"
+    },
+    "button_reset": {
+        "id": "Reset",
+        "en": "Reset"
+    },
+    "reset_tooltip": {
+        "id": "Kembalikan ke pengaturan awal",
+        "en": "Reset to default settings"
+    },
+    "visible_columns": {
+        "id": "Kolom yang Terlihat",
+        "en": "Visible Columns"
+    },
+    "reorder_hint": {
+        "id": "(Drag untuk menyusun ulang)",
+        "en": "(Drag to reorder)"
+    },
+    "table_settings": {
+        "id": "Pengaturan Tabel",
+        "en": "Table Settings"
+    },
+    "settings_saved": {
+        "id": "(Disimpan otomatis)",
+        "en": "(Auto-saved)"
+    },
+    "text_overflow": {
+        "id": "Tampilan Teks",
+        "en": "Text Display"
+    },
+    "truncate": {
+        "id": "Potong (Ellipsis)",
+        "en": "Truncate (Ellipsis)"
+    },
+    "wrap_text": {
+        "id": "Bungkus (Wrap)",
+        "en": "Wrap Text"
+    }
+}

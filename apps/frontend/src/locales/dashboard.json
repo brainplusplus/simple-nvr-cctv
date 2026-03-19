@@ -1,0 +1,14 @@
+{
+    "title": {
+        "id": "Dashboard",
+        "en": "Dashboard"
+    },
+    "welcome": {
+        "id": "Selamat Datang, {{name}}!",
+        "en": "Welcome, {{name}}!"
+    },
+    "subtitle": {
+        "id": "Ini adalah halaman dashboard Anda.",
+        "en": "This is your dashboard page."
+    }
+}

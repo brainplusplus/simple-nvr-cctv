@@ -1,0 +1,26 @@
+{
+    "title": {
+        "id": "Pengguna",
+        "en": "Users"
+    },
+    "subtitle": {
+        "id": "Kelola akun pengguna",
+        "en": "Manage user accounts"
+    },
+    "add_user": {
+        "id": "Tambah Pengguna",
+        "en": "Add User"
+    },
+    "edit_user": {
+        "id": "Ubah Pengguna",
+        "en": "Edit User"
+    },
+    "no_data": {
+        "id": "Belum ada pengguna.",
+        "en": "No users yet."
+    },
+    "users_found": {
+        "id": "{{count}} pengguna ditemukan",
+        "en": "{{count}} users found"
+    }
+}

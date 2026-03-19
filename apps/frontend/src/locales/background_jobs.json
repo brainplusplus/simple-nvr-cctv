@@ -1,0 +1,40 @@
+{
+    "title": {
+        "id": "Background Jobs",
+        "en": "Background Jobs"
+    },
+    "subtitle": {
+        "id": "Monitoring Job Latar Belakang",
+        "en": "Background Job Monitoring"
+    },
+    "columns": {
+        "type": {
+            "id": "Tipe",
+            "en": "Type"
+        },
+        "triggered_by": {
+            "id": "Dipicu Oleh",
+            "en": "Triggered By"
+        },
+        "status": {
+            "id": "Status",
+            "en": "Status"
+        },
+        "progress": {
+            "id": "Progres",
+            "en": "Progress"
+        },
+        "started_at": {
+            "id": "Mulai Pada",
+            "en": "Started At"
+        },
+        "finished_at": {
+            "id": "Selesai Pada",
+            "en": "Finished At"
+        },
+        "error_message": {
+            "id": "Pesan Error",
+            "en": "Error Message"
+        }
+    }
+}

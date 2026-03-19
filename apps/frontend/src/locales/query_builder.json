@@ -1,0 +1,56 @@
+{
+    "add_rule": {
+        "id": "Tambah Aturan",
+        "en": "Add Rule"
+    },
+    "add_group": {
+        "id": "Tambah Grup",
+        "en": "Add Group"
+    },
+    "select_field": {
+        "id": "Pilih Kolom",
+        "en": "Select Field"
+    },
+    "value_placeholder": {
+        "id": "Nilai",
+        "en": "Value"
+    },
+    "select_values_placeholder": {
+        "id": "Pilih nilai...",
+        "en": "Select values..."
+    },
+    "select_option_placeholder": {
+        "id": "Pilih opsi...",
+        "en": "Select option..."
+    },
+    "yes": {
+        "id": "Ya",
+        "en": "Yes"
+    },
+    "no": {
+        "id": "Tidak",
+        "en": "No"
+    },
+    "empty_message": {
+        "id": "Tidak ada filter. Klik 'Tambah Aturan' untuk memulai.",
+        "en": "No filters applied. Click 'Add Rule' to start."
+    },
+    "logic": {
+        "and": {
+            "id": "DAN",
+            "en": "AND"
+        },
+        "or": {
+            "id": "ATAU",
+            "en": "OR"
+        }
+    },
+    "and": {
+        "id": "DAN",
+        "en": "AND"
+    },
+    "or": {
+        "id": "ATAU",
+        "en": "OR"
+    }
+}
