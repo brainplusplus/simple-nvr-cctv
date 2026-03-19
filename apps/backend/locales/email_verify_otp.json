@@ -1,0 +1,30 @@
+{
+    "subject": {
+        "id": "Verifikasi Kode OTP Anda",
+        "en": "Verify Your OTP Code"
+    },
+    "title": {
+        "id": "Kode Verifikasi",
+        "en": "Verification Code"
+    },
+    "greeting": {
+        "id": "Halo,",
+        "en": "Hello,"
+    },
+    "message": {
+        "id": "Gunakan kode berikut untuk memverifikasi identitas Anda:",
+        "en": "Use the following code to verify your identity:"
+    },
+    "warning": {
+        "id": "Kode ini akan kadaluarsa dalam 5 menit. Jangan bagikan kode ini kepada siapapun.",
+        "en": "This code will expire in 5 minutes. Do not share this code with anyone."
+    },
+    "instruction": {
+        "id": "Masukkan kode ini pada halaman login untuk mengakses akun Anda.",
+        "en": "Enter this code on the login page to access your account."
+    },
+    "footer": {
+        "id": "Ini adalah pesan otomatis dari {{.AppName}}. Mohon jangan balas email ini.",
+        "en": "This is an automated message from {{.AppName}}. Please do not reply to this email."
+    }
+}
