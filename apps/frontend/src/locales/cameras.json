@@ -1,0 +1,316 @@
+{
+    "eyebrow": {
+        "id": "Kontrol NVR",
+        "en": "NVR Control"
+    },
+    "title": {
+        "id": "Kamera",
+        "en": "Cameras"
+    },
+    "subtitle": {
+        "id": "Pantau, rekam, dan tinjau {{count}} kamera aktif.",
+        "en": "Monitor, record, and review {{count}} managed cameras."
+    },
+    "add_camera": {
+        "id": "Tambah Kamera",
+        "en": "Add Camera"
+    },
+    "edit_camera": {
+        "id": "Ubah Kamera",
+        "en": "Edit Camera"
+    },
+    "empty": {
+        "id": "Belum ada kamera yang dikonfigurasi.",
+        "en": "No cameras configured yet."
+    },
+    "fields": {
+        "rtsp_url": {
+            "id": "URL RTSP",
+            "en": "RTSP URL"
+        }
+    },
+    "form": {
+        "subtitle": {
+            "id": "Simpan alamat RTSP dan aturan retensi untuk kamera ini.",
+            "en": "Store the RTSP address and retention rules for this camera."
+        },
+        "enabled_help": {
+            "id": "Aktifkan kamera dan mulai worker perekaman otomatis",
+            "en": "Enable this camera and start the recording worker automatically"
+        }
+    },
+    "status": {
+        "enabled": {
+            "id": "Aktif",
+            "en": "Enabled"
+        },
+        "disabled": {
+            "id": "Nonaktif",
+            "en": "Disabled"
+        },
+        "health": {
+            "id": "Kesehatan",
+            "en": "Health"
+        }
+    },
+    "health": {
+        "online": {
+            "id": "Online",
+            "en": "Online"
+        },
+        "offline": {
+            "id": "Offline",
+            "en": "Offline"
+        },
+        "stopped": {
+            "id": "Berhenti",
+            "en": "Stopped"
+        },
+        "error": {
+            "id": "Error",
+            "en": "Error"
+        }
+    },
+    "retention": {
+        "title": {
+            "id": "Retensi",
+            "en": "Retention"
+        },
+        "type": {
+            "id": "Tipe Retensi",
+            "en": "Retention Type"
+        },
+        "value": {
+            "id": "Nilai Retensi",
+            "en": "Retention Value"
+        },
+        "days": {
+            "id": "Hari",
+            "en": "Days"
+        },
+        "size": {
+            "id": "Ukuran",
+            "en": "Size"
+        },
+        "days_label": {
+            "id": "hari",
+            "en": "days"
+        },
+        "size_label": {
+            "id": "MB",
+            "en": "MB"
+        }
+    },
+    "detail": {
+        "title": {
+            "id": "Detail Kamera",
+            "en": "Camera Detail"
+        },
+        "refresh": {
+            "id": "Muat Ulang",
+            "en": "Refresh"
+        },
+        "snapshot": {
+            "id": "Snapshot",
+            "en": "Snapshot"
+        },
+        "refresh_snapshot": {
+            "id": "Ambil Ulang",
+            "en": "Refresh Snapshot"
+        },
+        "live": {
+            "id": "Live Streaming",
+            "en": "Live Streaming"
+        },
+        "live_help": {
+            "id": "Pantau stream langsung kamera dengan mode HLS yang ramah browser.",
+            "en": "Monitor the camera in a browser-friendly HLS live view."
+        },
+        "live_help_audio": {
+            "id": "Mode kompatibel memprioritaskan audio dan kestabilan playback.",
+            "en": "Compatible mode prioritises audio and stable playback."
+        },
+        "live_help_low_latency": {
+            "id": "Mode low latency memakai WebRTC beta dan bisa fallback ke HLS jika perlu.",
+            "en": "Low-latency mode uses beta WebRTC and can fall back to HLS if needed."
+        },
+        "compatible_mode": {
+            "id": "Kompatibel + Audio",
+            "en": "Compatible + Audio"
+        },
+        "low_latency_mode": {
+            "id": "Low Latency (Beta)",
+            "en": "Low Latency (Beta)"
+        },
+        "live_empty": {
+            "id": "Stream live belum tersedia.",
+            "en": "Live stream is not available yet."
+        },
+        "live_unavailable": {
+            "id": "Stream live tidak tersedia. Cek RTSP atau status kamera.",
+            "en": "Live stream is unavailable. Check the RTSP URL or camera status."
+        },
+        "player": {
+            "id": "Pemutar Rekaman",
+            "en": "Recording Player"
+        },
+        "no_recording_selected": {
+            "id": "Pilih rekaman untuk diputar.",
+            "en": "Select a recording to start playback."
+        },
+        "retention": {
+            "id": "Aturan Retensi",
+            "en": "Retention Policy"
+        },
+        "recording_size": {
+            "id": "Ukuran Rekaman",
+            "en": "Recording Size"
+        },
+        "restarts": {
+            "id": "Jumlah Restart",
+            "en": "Restart Count"
+        }
+    },
+    "view": {
+        "list": {
+            "id": "Tabel",
+            "en": "List"
+        },
+        "nvr": {
+            "id": "Mode NVR",
+            "en": "NVR View"
+        },
+        "open_detail": {
+            "id": "Buka Detail",
+            "en": "Open Detail"
+        },
+        "live_badge": {
+            "id": "Live",
+            "en": "Live"
+        },
+        "live_empty": {
+            "id": "Belum ada preview live.",
+            "en": "No live preview yet."
+        },
+        "live_unavailable": {
+            "id": "Preview live gagal dimuat.",
+            "en": "Live preview failed to load."
+        },
+        "previous": {
+            "id": "Sebelumnya",
+            "en": "Previous"
+        },
+        "next": {
+            "id": "Berikutnya",
+            "en": "Next"
+        },
+        "page_summary": {
+            "id": "Halaman {{page}} dari {{total}}",
+            "en": "Page {{page}} of {{total}}"
+        }
+    },
+    "recordings": {
+        "filename": {
+            "id": "Nama File",
+            "en": "Filename"
+        },
+        "timestamp": {
+            "id": "Waktu",
+            "en": "Timestamp"
+        },
+        "size": {
+            "id": "Ukuran",
+            "en": "Size"
+        },
+        "play": {
+            "id": "Putar",
+            "en": "Play"
+        },
+        "empty": {
+            "id": "Belum ada rekaman untuk kamera ini.",
+            "en": "No recordings found for this camera yet."
+        },
+        "selected_count": {
+            "id": "{{count}} rekaman dipilih",
+            "en": "{{count}} recordings selected"
+        },
+        "select_all": {
+            "id": "Pilih Semua",
+            "en": "Select All"
+        },
+        "deselect_all": {
+            "id": "Batal Pilih Semua",
+            "en": "Deselect All"
+        },
+        "delete_selected": {
+            "id": "Hapus Terpilih",
+            "en": "Delete Selected"
+        },
+        "delete_selected_confirm": {
+            "id": "Hapus {{count}} rekaman terpilih? Tindakan ini tidak bisa dibatalkan.",
+            "en": "Delete {{count}} selected recordings? This action cannot be undone."
+        },
+        "delete_selected_success": {
+            "id": "{{count}} rekaman berhasil dihapus.",
+            "en": "{{count}} recordings deleted successfully."
+        },
+        "delete_selected_failed": {
+            "id": "Gagal menghapus rekaman terpilih.",
+            "en": "Failed to delete selected recordings."
+        }
+    },
+    "messages": {
+        "load_failed": {
+            "id": "Gagal memuat kamera.",
+            "en": "Failed to load cameras."
+        },
+        "detail_failed": {
+            "id": "Gagal memuat detail kamera.",
+            "en": "Failed to load camera details."
+        },
+        "not_found": {
+            "id": "Kamera tidak ditemukan.",
+            "en": "Camera not found."
+        },
+        "created": {
+            "id": "Kamera berhasil dibuat.",
+            "en": "Camera created."
+        },
+        "create_failed": {
+            "id": "Gagal membuat kamera.",
+            "en": "Failed to create camera."
+        },
+        "updated": {
+            "id": "Kamera berhasil diperbarui.",
+            "en": "Camera updated."
+        },
+        "update_failed": {
+            "id": "Gagal memperbarui kamera.",
+            "en": "Failed to update camera."
+        },
+        "delete_confirm": {
+            "id": "Hapus kamera {{name}}? Rekaman tetap disimpan untuk MVP.",
+            "en": "Delete camera {{name}}? Existing recordings stay available for MVP."
+        },
+        "deleted": {
+            "id": "Kamera dihapus.",
+            "en": "Camera deleted."
+        },
+        "delete_failed": {
+            "id": "Gagal menghapus kamera.",
+            "en": "Failed to delete camera."
+        },
+        "enabled": {
+            "id": "Kamera diaktifkan.",
+            "en": "Camera enabled."
+        },
+        "disabled": {
+            "id": "Kamera dinonaktifkan.",
+            "en": "Camera disabled."
+        },
+        "toggle_failed": {
+            "id": "Gagal mengubah status kamera.",
+            "en": "Failed to change camera status."
+        }
+    }
+}
