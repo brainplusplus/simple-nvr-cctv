@@ -4,7 +4,7 @@ import { RefreshCcw, PlayCircle, Image as ImageIcon, Radio, Trash2, Video } from
 import DataTable, { type Column } from '../components/DataTable';
 import CameraSnapshotImage from '../components/CameraSnapshotImage';
 import FileVideoPlayer from '../components/FileVideoPlayer';
-import LiveStreamPlayer from '../components/LiveStreamPlayer';
+import CameraLivePlayer from '../components/CameraLivePlayer';
 import { camerasApi, formatBytes, type CameraResponse, type RecordingFile } from '../api/cameras';
 import { useTranslation } from '../hooks/useTranslation';
 import { useToast } from '../contexts/ToastContext';
@@ -49,7 +49,6 @@ const CameraDetailPage: React.FC = () => {
 
     const snapshotUrl = useMemo(() => camerasApi.getSnapshotUrl(id, snapshotVersion), [id, snapshotVersion]);
     const playbackUrl = useMemo(() => activeRecording ? camerasApi.getPlaybackUrl(activeRecording.playback_url) : '', [activeRecording]);
-    const livePlaylistUrl = useMemo(() => camerasApi.getLivePlaylistUrl(id), [id]);
     const totalRecordingSize = useMemo(() => recordings.reduce((sum, recording) => sum + recording.size, 0), [recordings]);
     const allRecordingKeys = useMemo(() => recordings.map((recording) => recording.relative_path), [recordings]);
     const selectedRecordingItems = useMemo(
@@ -180,16 +179,18 @@ const CameraDetailPage: React.FC = () => {
                                     <Radio size={14} /> {t('detail.live')}
                                 </div>
                                 <h2 style={{ margin: 0, fontSize: '18px', color: '#0f172a' }}>{t('detail.live')}</h2>
-                                <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: '14px' }}>{t('detail.live_help_audio')}</p>
+                                <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: '14px' }}>{t('detail.live_help_low_latency')}</p>
                             </div>
                             <Video size={20} color="#0f766e" />
                         </div>
                         <div style={{ minHeight: '320px' }}>
-                            <LiveStreamPlayer
-                                src={livePlaylistUrl}
+                            <CameraLivePlayer
+                                cameraId={id}
                                 controls={true}
                                 autoPlay={true}
                                 muted={true}
+                                preferLowLatency={true}
+                                allowFallback={true}
                                 emptyLabel={t('detail.live_empty')}
                                 errorLabel={t('detail.live_unavailable')}
                                 style={{ minHeight: '320px' }}

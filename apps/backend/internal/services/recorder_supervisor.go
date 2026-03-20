@@ -301,6 +301,8 @@ func (r *ExecFFmpegRunner) Start(ctx context.Context, request FFmpegStartRequest
 		"-map", "0:a:0?",
 		"-c", "copy",
 		"-f", "segment",
+		"-segment_format", "mp4",
+		"-segment_format_options", "movflags=+faststart",
 		"-segment_time", fmt.Sprintf("%d", request.SegmentSeconds),
 		"-reset_timestamps", "1",
 		"-strftime", "1",

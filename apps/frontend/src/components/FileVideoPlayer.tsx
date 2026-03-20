@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import { usePlyr } from '../hooks/usePlyr';
+import React from 'react';
 
 interface FileVideoPlayerProps {
     src: string;
@@ -8,36 +7,27 @@ interface FileVideoPlayerProps {
 }
 
 const FileVideoPlayer: React.FC<FileVideoPlayerProps> = ({ src, poster, style }) => {
-    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const videoRef = React.useRef<HTMLVideoElement | null>(null);
 
-    usePlyr(videoRef, true);
-
-    useEffect(() => {
+    React.useEffect(() => {
         const video = videoRef.current;
-        if (!video) {
+        if (!video || !src) {
             return;
         }
 
-        video.src = src;
-        video.load();
         void video.play().catch(() => undefined);
-
-        return () => {
-            video.pause();
-            video.removeAttribute('src');
-            video.load();
-        };
     }, [src]);
 
     return (
         <video
             ref={videoRef}
+            src={src}
             controls={true}
             preload="metadata"
             poster={poster}
             style={{ width: '100%', maxHeight: '520px', background: '#020617', ...style }}
         >
-            <track kind="captions" label="Captions unavailable" />
+            <track kind="captions" srcLang="en" label="Captions unavailable" src="data:text/vtt,WEBVTT" />
         </video>
     );
 };
