@@ -37,21 +37,30 @@ func SetupRoutes(e *echo.Echo, db *gorm.DB) {
 	tableSettingService := services.NewTableSettingService(tableSettingRepo)
 	backgroundJobService := services.NewBackgroundJobService(backgroundJobRepo)
 	nvrConfig := loadNVRConfig()
+	var relay services.RelayManager
+	if nvrConfig.go2rtcAPIURL != "" && nvrConfig.go2rtcRTSPURL != "" {
+		relay = services.NewGo2RTCRelayManager(services.Go2RTCRelayConfig{
+			APIURL:       nvrConfig.go2rtcAPIURL,
+			RTSPURL:      nvrConfig.go2rtcRTSPURL,
+			StreamPrefix: nvrConfig.go2rtcStreamPrefix,
+		})
+	}
 	recorderSupervisor := services.NewRecorderSupervisor(services.RecorderSupervisorConfig{
 		RecordingsRoot:        nvrConfig.recordingsRoot,
+		Relay:                 relay,
 		SegmentSeconds:        nvrConfig.segmentSeconds,
 		HealthStaleAfter:      nvrConfig.healthStaleAfter,
 		InitialRestartBackoff: nvrConfig.initialRestartBackoff,
 		MaxRestartBackoff:     nvrConfig.maxRestartBackoff,
 		StopTimeout:           nvrConfig.stopTimeout,
 	}, nil, log.Default())
-	cameraService := services.NewCameraService(cameraRepo, recorderSupervisor)
+	cameraService := services.NewCameraService(cameraRepo, recorderSupervisor, relay)
 	recordingService := services.NewRecordingService(services.RecordingServiceConfig{
 		RecordingsRoot:  nvrConfig.recordingsRoot,
 		FFmpegBinary:    nvrConfig.ffmpegBinary,
 		SnapshotTTL:     nvrConfig.snapshotTTL,
 		SnapshotTimeout: nvrConfig.snapshotTimeout,
-	}, cameraRepo)
+	}, cameraRepo, relay)
 	retentionService := services.NewRetentionService(services.RetentionConfig{})
 
 	// ===== Handlers =====
@@ -68,6 +77,13 @@ func SetupRoutes(e *echo.Echo, db *gorm.DB) {
 		if err != nil {
 			log.Printf("failed to load enabled cameras on startup: %v", err)
 			return
+		}
+		if relay != nil {
+			for _, camera := range enabledCameras {
+				if err := relay.SyncCamera(ctx, camera); err != nil {
+					log.Printf("failed to sync relay for camera %s: %v", camera.ID, err)
+				}
+			}
 		}
 		recorderSupervisor.ResumeEnabledCameras(ctx, enabledCameras)
 	}()
@@ -135,6 +151,9 @@ func SetupRoutes(e *echo.Echo, db *gorm.DB) {
 type nvrConfig struct {
 	recordingsRoot        string
 	ffmpegBinary          string
+	go2rtcAPIURL          string
+	go2rtcRTSPURL         string
+	go2rtcStreamPrefix    string
 	segmentSeconds        int
 	retentionInterval     time.Duration
 	healthStaleAfter      time.Duration
@@ -149,6 +168,9 @@ func loadNVRConfig() nvrConfig {
 	return nvrConfig{
 		recordingsRoot:        envString("RECORDINGS_ROOT", "recordings"),
 		ffmpegBinary:          envString("FFMPEG_BIN", "ffmpeg"),
+		go2rtcAPIURL:          envString("GO2RTC_API_URL", ""),
+		go2rtcRTSPURL:         envString("GO2RTC_RTSP_URL", ""),
+		go2rtcStreamPrefix:    envString("GO2RTC_STREAM_PREFIX", "camera_"),
 		segmentSeconds:        envInt("NVR_SEGMENT_SECONDS", 3600),
 		retentionInterval:     time.Duration(envInt("NVR_RETENTION_INTERVAL_SECONDS", 300)) * time.Second,
 		healthStaleAfter:      time.Duration(envInt("NVR_HEALTH_STALE_SECONDS", 600)) * time.Second,

@@ -41,6 +41,7 @@ type RecordingServiceConfig struct {
 type RecordingService struct {
 	cfg        RecordingServiceConfig
 	cameraRepo CameraLookupRepository
+	relay      RelayManager
 	mu         sync.RWMutex
 	cache      map[string]cachedSnapshot
 	live       map[string]*liveSession
@@ -56,7 +57,7 @@ type cachedSnapshot struct {
 	expiresAt time.Time
 }
 
-func NewRecordingService(cfg RecordingServiceConfig, cameraRepo CameraLookupRepository) *RecordingService {
+func NewRecordingService(cfg RecordingServiceConfig, cameraRepo CameraLookupRepository, relay RelayManager) *RecordingService {
 	if cfg.RecordingsRoot == "" {
 		cfg.RecordingsRoot = "recordings"
 	}
@@ -82,7 +83,7 @@ func NewRecordingService(cfg RecordingServiceConfig, cameraRepo CameraLookupRepo
 		cfg.LivePlaylistSize = 6
 	}
 	if cfg.LiveStartupTimeout <= 0 {
-		cfg.LiveStartupTimeout = 15 * time.Second
+		cfg.LiveStartupTimeout = 45 * time.Second
 	}
 	if cfg.LiveIdleTimeout <= 0 {
 		cfg.LiveIdleTimeout = 45 * time.Second
@@ -96,7 +97,7 @@ func NewRecordingService(cfg RecordingServiceConfig, cameraRepo CameraLookupRepo
 	if cfg.Now == nil {
 		cfg.Now = time.Now
 	}
-	service := &RecordingService{cfg: cfg, cameraRepo: cameraRepo, cache: make(map[string]cachedSnapshot), live: make(map[string]*liveSession)}
+	service := &RecordingService{cfg: cfg, cameraRepo: cameraRepo, relay: relay, cache: make(map[string]cachedSnapshot), live: make(map[string]*liveSession)}
 	go service.runLiveCleanupLoop()
 	return service
 }
@@ -202,7 +203,7 @@ func (s *RecordingService) GetSnapshot(ctx context.Context, cameraID string) (*m
 	if err != nil {
 		return nil, err
 	}
-	content, err := s.captureSnapshotFromRTSP(ctx, camera.RTSPURL)
+	content, err := s.captureSnapshotFromRTSP(ctx, s.sourceURL(*camera))
 	if err != nil {
 		if cached, ok := s.getAnyCachedSnapshot(cameraID); ok {
 			return &cached, nil
@@ -235,6 +236,15 @@ func (s *RecordingService) captureSnapshotFromRTSP(ctx context.Context, rtspURL 
 		"-probesize", "10000000",
 		"-i", rtspURL,
 	})
+}
+
+func (s *RecordingService) sourceURL(camera models.Camera) string {
+	if s.relay != nil {
+		if relayURL := s.relay.RTSPURL(camera.ID); relayURL != "" {
+			return relayURL
+		}
+	}
+	return camera.RTSPURL
 }
 
 func (s *RecordingService) captureSnapshotFromFile(ctx context.Context, filePath string) ([]byte, error) {

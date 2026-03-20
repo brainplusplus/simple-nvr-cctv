@@ -54,10 +54,11 @@ type CameraRuntimeProvider interface {
 type CameraService struct {
 	repo    CameraRepositoryAPI
 	runtime CameraRuntimeProvider
+	relay   RelayManager
 }
 
-func NewCameraService(repo CameraRepositoryAPI, runtime CameraRuntimeProvider) *CameraService {
-	return &CameraService{repo: repo, runtime: runtime}
+func NewCameraService(repo CameraRepositoryAPI, runtime CameraRuntimeProvider, relay RelayManager) *CameraService {
+	return &CameraService{repo: repo, runtime: runtime, relay: relay}
 }
 
 func (s *CameraService) List(ctx context.Context) ([]models.CameraResponse, error) {
@@ -99,6 +100,11 @@ func (s *CameraService) Create(ctx context.Context, input CreateCameraInput) (*m
 	if err := s.repo.Create(ctx, camera); err != nil {
 		return nil, err
 	}
+	if s.relay != nil {
+		if err := s.relay.SyncCamera(ctx, *camera); err != nil {
+			return nil, err
+		}
+	}
 	if s.runtime != nil {
 		_ = s.runtime.SyncCamera(ctx, *camera)
 	}
@@ -124,6 +130,11 @@ func (s *CameraService) Update(ctx context.Context, id string, input UpdateCamer
 	if err := s.repo.Update(ctx, camera); err != nil {
 		return nil, err
 	}
+	if s.relay != nil {
+		if err := s.relay.SyncCamera(ctx, *camera); err != nil {
+			return nil, err
+		}
+	}
 	if s.runtime != nil {
 		_ = s.runtime.SyncCamera(ctx, *camera)
 	}
@@ -134,6 +145,9 @@ func (s *CameraService) Update(ctx context.Context, id string, input UpdateCamer
 func (s *CameraService) Delete(ctx context.Context, id string) error {
 	if s.runtime != nil {
 		_ = s.runtime.RemoveCamera(id)
+	}
+	if s.relay != nil {
+		_ = s.relay.RemoveCamera(ctx, id)
 	}
 	return s.repo.Delete(ctx, id)
 }

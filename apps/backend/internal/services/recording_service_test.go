@@ -24,7 +24,7 @@ func TestRecordingServiceListsNewestFilesFirst(t *testing.T) {
 		t.Fatalf("WriteFile second returned error: %v", err)
 	}
 
-	service := NewRecordingService(RecordingServiceConfig{RecordingsRoot: root}, nil)
+	service := NewRecordingService(RecordingServiceConfig{RecordingsRoot: root}, nil, nil)
 	recordings, err := service.List(context.Background(), "cam-1")
 	if err != nil {
 		t.Fatalf("List returned error: %v", err)
@@ -44,7 +44,7 @@ func TestRecordingServiceListsNewestFilesFirst(t *testing.T) {
 }
 
 func TestRecordingServiceRejectsPathTraversal(t *testing.T) {
-	service := NewRecordingService(RecordingServiceConfig{RecordingsRoot: t.TempDir()}, nil)
+	service := NewRecordingService(RecordingServiceConfig{RecordingsRoot: t.TempDir()}, nil, nil)
 
 	if _, _, _, err := service.OpenFile(context.Background(), "cam-1", "../evil.mp4"); err == nil {
 		t.Fatalf("expected path traversal to be rejected")
@@ -57,7 +57,7 @@ func TestRecordingServiceBuildsSnapshotCacheEntries(t *testing.T) {
 		RecordingsRoot: t.TempDir(),
 		SnapshotTTL:    time.Minute,
 		Now:            func() time.Time { return now },
-	}, nil)
+	}, nil, nil)
 
 	service.cacheSnapshot("cam-1", []byte("jpeg"), "image/jpeg")
 
@@ -97,7 +97,7 @@ func TestRecordingServiceDeletesSelectedFiles(t *testing.T) {
 		}
 	}
 
-	service := NewRecordingService(RecordingServiceConfig{RecordingsRoot: root}, nil)
+	service := NewRecordingService(RecordingServiceConfig{RecordingsRoot: root}, nil, nil)
 	result, err := service.Delete(context.Background(), "cam-1", []string{
 		"2026/03/19/20260319_170000.mp4",
 		"2026/03/19/20260319_190000.mp4",
@@ -136,7 +136,7 @@ func TestRecordingServiceSkipsCurrentHourlyRecording(t *testing.T) {
 		}
 	}
 
-	service := NewRecordingService(RecordingServiceConfig{RecordingsRoot: root, Now: func() time.Time { return now }}, nil)
+	service := NewRecordingService(RecordingServiceConfig{RecordingsRoot: root, Now: func() time.Time { return now }}, nil, nil)
 	result, err := service.Delete(context.Background(), "cam-1", []string{
 		"2026/03/20/20260320_170000.mp4",
 		"2026/03/20/20260320_160000.mp4",

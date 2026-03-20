@@ -69,6 +69,14 @@ func (s *RecordingService) ensureLiveSession(ctx context.Context, cameraID strin
 	if err != nil {
 		return err
 	}
+	if s.relay != nil {
+		if err := s.relay.SyncCamera(ctx, *camera); err != nil {
+			return err
+		}
+		if relayURL := s.relay.RTSPURL(camera.ID); relayURL != "" {
+			camera.RTSPURL = relayURL
+		}
+	}
 
 	streamDir := filepath.Join(s.cfg.LiveRoot, cameraID)
 	if err := os.RemoveAll(streamDir); err != nil {

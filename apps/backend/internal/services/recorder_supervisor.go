@@ -41,6 +41,7 @@ type RecorderSupervisorConfig struct {
 	InitialRestartBackoff time.Duration
 	MaxRestartBackoff     time.Duration
 	StopTimeout           time.Duration
+	Relay                 RelayManager
 	Now                   func() time.Time
 }
 
@@ -100,6 +101,14 @@ func (s *RecorderSupervisor) StartCamera(ctx context.Context, camera models.Came
 	}
 	if err := ensureRecordingDirs(s.cfg.RecordingsRoot, camera.ID, s.cfg.Now().UTC()); err != nil {
 		return err
+	}
+	if s.cfg.Relay != nil {
+		if err := s.cfg.Relay.SyncCamera(ctx, camera); err != nil {
+			return err
+		}
+		if relayURL := s.cfg.Relay.RTSPURL(camera.ID); relayURL != "" {
+			camera.RTSPURL = relayURL
+		}
 	}
 
 	request := FFmpegStartRequest{

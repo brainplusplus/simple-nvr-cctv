@@ -28,6 +28,14 @@ func (s *RecordingService) CreateWebRTCAnswer(ctx context.Context, cameraID stri
 	if err != nil {
 		return nil, err
 	}
+	if s.relay != nil {
+		if err := s.relay.SyncCamera(ctx, *camera); err != nil {
+			return nil, err
+		}
+		if relayURL := s.relay.RTSPURL(camera.ID); relayURL != "" {
+			camera.RTSPURL = relayURL
+		}
+	}
 
 	mediaEngine := &webrtc.MediaEngine{}
 	if err := mediaEngine.RegisterDefaultCodecs(); err != nil {
