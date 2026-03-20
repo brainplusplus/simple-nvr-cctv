@@ -156,14 +156,24 @@ func (s *RecordingService) OpenFile(ctx context.Context, cameraID, relativePath 
 
 func (s *RecordingService) Delete(ctx context.Context, cameraID string, relativePaths []string) (DeleteRecordingsResult, error) {
 	result := DeleteRecordingsResult{}
-	currentHour := s.cfg.Now().UTC().Truncate(time.Hour)
+	currentLocal := s.cfg.Now().In(time.Local)
+	activeHourlyFilename := time.Date(
+		currentLocal.Year(),
+		currentLocal.Month(),
+		currentLocal.Day(),
+		currentLocal.Hour(),
+		0,
+		0,
+		0,
+		time.Local,
+	).Format("20060102_150405") + ".mp4"
 	for _, relativePath := range relativePaths {
 		clean, err := validateRelativeRecordingPath(relativePath)
 		if err != nil {
 			return result, err
 		}
 
-		if parseRecordingTimestamp(clean, time.Time{}).Equal(currentHour) {
+		if filepath.Base(clean) == activeHourlyFilename {
 			result.Skipped = append(result.Skipped, clean)
 			continue
 		}

@@ -122,7 +122,7 @@ func TestRecordingServiceDeletesSelectedFiles(t *testing.T) {
 
 func TestRecordingServiceSkipsCurrentHourlyRecording(t *testing.T) {
 	root := t.TempDir()
-	now := time.Date(2026, 3, 20, 17, 30, 0, 0, time.UTC)
+	now := time.Date(2026, 3, 20, 17, 30, 0, 0, time.Local)
 	cameraRoot := filepath.Join(root, "cam-1", "2026", "03", "20")
 	if err := os.MkdirAll(cameraRoot, 0o755); err != nil {
 		t.Fatalf("MkdirAll returned error: %v", err)
