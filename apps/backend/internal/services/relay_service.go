@@ -15,6 +15,7 @@ type RelayManager interface {
 	SyncCamera(ctx context.Context, camera models.Camera) error
 	RemoveCamera(ctx context.Context, cameraID string) error
 	RTSPURL(cameraID string) string
+	BrowserStreamName(cameraID string) string
 }
 
 type Go2RTCRelayConfig struct {
@@ -75,6 +76,13 @@ func (m *Go2RTCRelayManager) SyncCamera(ctx context.Context, camera models.Camer
 		_ = m.request(ctx, http.MethodDelete, "/api/preload", preload)
 	}
 
+	browser := url.Values{}
+	browser.Set("name", m.browserStreamName(camera.ID))
+	browser.Set("src", fmt.Sprintf("ffmpeg:%s#video=h264#audio=aac", streamName))
+	if err := m.request(ctx, http.MethodPut, "/api/streams", browser); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -86,6 +94,9 @@ func (m *Go2RTCRelayManager) RemoveCamera(ctx context.Context, cameraID string) 
 	streamName := m.streamName(cameraID)
 	params := url.Values{}
 	params.Set("src", streamName)
+	browser := url.Values{}
+	browser.Set("src", m.browserStreamName(cameraID))
+	_ = m.request(ctx, http.MethodDelete, "/api/streams", browser)
 	_ = m.request(ctx, http.MethodDelete, "/api/preload", params)
 	return m.request(ctx, http.MethodDelete, "/api/streams", params)
 }
@@ -97,8 +108,19 @@ func (m *Go2RTCRelayManager) RTSPURL(cameraID string) string {
 	return fmt.Sprintf("%s/%s?mp4", trimTrailingSlash(m.cfg.RTSPURL), m.streamName(cameraID))
 }
 
+func (m *Go2RTCRelayManager) BrowserStreamName(cameraID string) string {
+	if !m.Enabled() {
+		return ""
+	}
+	return m.browserStreamName(cameraID)
+}
+
 func (m *Go2RTCRelayManager) streamName(cameraID string) string {
 	return m.cfg.StreamPrefix + cameraID
+}
+
+func (m *Go2RTCRelayManager) browserStreamName(cameraID string) string {
+	return m.streamName(cameraID) + "_browser"
 }
 
 func (m *Go2RTCRelayManager) request(ctx context.Context, method, path string, params url.Values) error {
