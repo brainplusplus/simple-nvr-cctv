@@ -1,5 +1,5 @@
 # Build stage for reverse proxy
-FROM golang:1.21-alpine AS proxy-builder
+FROM golang:1.24-alpine AS proxy-builder
 
 WORKDIR /app
 
