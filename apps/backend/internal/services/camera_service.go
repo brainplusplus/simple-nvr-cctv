@@ -68,6 +68,7 @@ func (s *CameraService) List(ctx context.Context) ([]models.CameraResponse, erro
 	}
 	responses := make([]models.CameraResponse, 0, len(cameras))
 	for _, camera := range cameras {
+		s.ensureRelayAndRuntime(ctx, camera)
 		responses = append(responses, camera.ToResponse(s.getStatus(camera.ID, camera.Enabled)))
 	}
 	return responses, nil
@@ -78,6 +79,7 @@ func (s *CameraService) Get(ctx context.Context, id string) (*models.CameraRespo
 	if err != nil {
 		return nil, err
 	}
+	s.ensureRelayAndRuntime(ctx, *camera)
 	response := camera.ToResponse(s.getStatus(camera.ID, camera.Enabled))
 	return &response, nil
 }
@@ -167,6 +169,15 @@ func (s *CameraService) getStatus(cameraID string, enabled bool) models.CameraRu
 		state = models.CameraHealthOffline
 	}
 	return models.CameraRuntimeStatus{State: state}
+}
+
+func (s *CameraService) ensureRelayAndRuntime(ctx context.Context, camera models.Camera) {
+	if s.relay != nil {
+		_ = s.relay.SyncCamera(ctx, camera)
+	}
+	if s.runtime != nil && camera.Enabled {
+		_ = s.runtime.SyncCamera(ctx, camera)
+	}
 }
 
 func validateCameraInput(name, rtspURL string, setting RecordingSettingInput) error {
