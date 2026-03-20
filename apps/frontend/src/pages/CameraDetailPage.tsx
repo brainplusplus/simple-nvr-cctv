@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { RefreshCcw, PlayCircle, Image as ImageIcon, Radio, Trash2, Video } from 'lucide-react';
 import DataTable, { type Column } from '../components/DataTable';
-import CameraLivePlayer from '../components/CameraLivePlayer';
 import CameraSnapshotImage from '../components/CameraSnapshotImage';
 import FileVideoPlayer from '../components/FileVideoPlayer';
+import LiveStreamPlayer from '../components/LiveStreamPlayer';
 import { camerasApi, formatBytes, type CameraResponse, type RecordingFile } from '../api/cameras';
 import { useTranslation } from '../hooks/useTranslation';
 import { useToast } from '../contexts/ToastContext';
@@ -22,7 +22,6 @@ const CameraDetailPage: React.FC = () => {
     const [selectedRecordings, setSelectedRecordings] = useState<Set<string>>(new Set());
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [snapshotVersion, setSnapshotVersion] = useState(0);
-    const [liveMode, setLiveMode] = useState<'compatible' | 'low-latency'>('low-latency');
 
     const load = useCallback(async () => {
         if (!id) return;
@@ -50,6 +49,7 @@ const CameraDetailPage: React.FC = () => {
 
     const snapshotUrl = useMemo(() => camerasApi.getSnapshotUrl(id, snapshotVersion), [id, snapshotVersion]);
     const playbackUrl = useMemo(() => activeRecording ? camerasApi.getPlaybackUrl(activeRecording.playback_url) : '', [activeRecording]);
+    const livePlaylistUrl = useMemo(() => camerasApi.getLivePlaylistUrl(id), [id]);
     const totalRecordingSize = useMemo(() => recordings.reduce((sum, recording) => sum + recording.size, 0), [recordings]);
     const allRecordingKeys = useMemo(() => recordings.map((recording) => recording.relative_path), [recordings]);
     const selectedRecordingItems = useMemo(
@@ -92,14 +92,11 @@ const CameraDetailPage: React.FC = () => {
         }
     }, [activeRecording, error, id, load, selectedRecordings, success, t, warning]);
 
-    const handleWebRTCFallback = useCallback(() => {
-        if (liveMode !== 'low-latency') {
-            return;
-        }
-
-        setLiveMode('compatible');
-        warning(t('detail.live_webrtc_fallback'));
-    }, [liveMode, t, warning]);
+    const isRecordingPlayable = useCallback((recording: RecordingFile) => {
+        const now = new Date();
+        const currentHourlyFilename = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}0000.mp4`;
+        return recording.filename !== currentHourlyFilename;
+    }, []);
 
     const columns = useMemo<Column<RecordingFile>[]>(() => [
         { key: 'filename', label: t('recordings.filename'), sortable: true },
@@ -108,13 +105,31 @@ const CameraDetailPage: React.FC = () => {
         {
             key: 'playback_url',
             label: tGeneral('datatables.actions'),
-            render: (recording) => (
-                <button type="button" onClick={() => setActiveRecording(recording)} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 12px', borderRadius: '10px', border: 'none', background: '#0f766e', color: 'white', cursor: 'pointer' }}>
-                    <PlayCircle size={16} /> {t('recordings.play')}
-                </button>
-            ),
+            render: (recording) => {
+                const playable = isRecordingPlayable(recording);
+                return (
+                    <button
+                        type="button"
+                        onClick={() => playable && setActiveRecording(recording)}
+                        disabled={!playable}
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '8px 12px',
+                            borderRadius: '10px',
+                            border: 'none',
+                            background: playable ? '#0f766e' : '#cbd5e1',
+                            color: playable ? 'white' : '#64748b',
+                            cursor: playable ? 'pointer' : 'not-allowed',
+                        }}
+                    >
+                        <PlayCircle size={16} /> {playable ? t('recordings.play') : t('recordings.recording_now')}
+                    </button>
+                );
+            },
         },
-    ], [t, tGeneral]);
+    ], [isRecordingPlayable, t, tGeneral]);
 
     if (!camera && !isLoading) {
         return <div style={{ color: '#64748b' }}>{t('messages.not_found')}</div>;
@@ -165,27 +180,16 @@ const CameraDetailPage: React.FC = () => {
                                     <Radio size={14} /> {t('detail.live')}
                                 </div>
                                 <h2 style={{ margin: 0, fontSize: '18px', color: '#0f172a' }}>{t('detail.live')}</h2>
-                                <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: '14px' }}>{liveMode === 'compatible' ? t('detail.live_help_audio') : t('detail.live_help_low_latency')}</p>
+                                <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: '14px' }}>{t('detail.live_help_audio')}</p>
                             </div>
                             <Video size={20} color="#0f766e" />
                         </div>
-                        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
-                            <button type="button" onClick={() => setLiveMode('compatible')} style={modeButton(liveMode === 'compatible')}>
-                                {t('detail.compatible_mode')}
-                            </button>
-                            <button type="button" onClick={() => setLiveMode('low-latency')} style={modeButton(liveMode === 'low-latency')}>
-                                {t('detail.low_latency_mode')}
-                            </button>
-                        </div>
                         <div style={{ minHeight: '320px' }}>
-                            <CameraLivePlayer
-                                cameraId={id}
+                            <LiveStreamPlayer
+                                src={livePlaylistUrl}
                                 controls={true}
                                 autoPlay={true}
                                 muted={true}
-                                preferLowLatency={liveMode === 'low-latency'}
-                                allowFallback={true}
-                                onFallback={handleWebRTCFallback}
                                 emptyLabel={t('detail.live_empty')}
                                 errorLabel={t('detail.live_unavailable')}
                                 style={{ minHeight: '320px' }}
@@ -204,7 +208,7 @@ const CameraDetailPage: React.FC = () => {
 
                         <div style={{ borderRadius: '18px', overflow: 'hidden', background: '#020617', minHeight: '320px', display: 'grid', placeItems: 'center' }}>
                             {activeRecording ? (
-                                <FileVideoPlayer src={playbackUrl} poster={snapshotUrl} />
+                                <FileVideoPlayer key={activeRecording.relative_path} src={playbackUrl} poster={snapshotUrl} />
                             ) : (
                                 <div style={{ color: '#cbd5e1' }}>{t('detail.no_recording_selected')}</div>
                             )}
@@ -291,17 +295,6 @@ const Metric: React.FC<{ label: string; value: string }> = ({ label, value }) =>
         <div style={{ fontSize: '15px', color: '#0f172a', fontWeight: 700 }}>{value}</div>
     </div>
 );
-
-const modeButton = (active: boolean): React.CSSProperties => ({
-    padding: '8px 12px',
-    borderRadius: '999px',
-    border: '1px solid #cbd5e1',
-    background: active ? '#0f766e' : 'white',
-    color: active ? 'white' : '#334155',
-    cursor: 'pointer',
-    fontWeight: 700,
-    fontSize: '13px',
-});
 
 const secondaryActionButton = (disabled: boolean): React.CSSProperties => ({
     display: 'inline-flex',

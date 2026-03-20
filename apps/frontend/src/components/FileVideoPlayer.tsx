@@ -20,6 +20,7 @@ const FileVideoPlayer: React.FC<FileVideoPlayerProps> = ({ src, poster, style })
 
         video.src = src;
         video.load();
+        void video.play().catch(() => undefined);
 
         return () => {
             video.pause();
