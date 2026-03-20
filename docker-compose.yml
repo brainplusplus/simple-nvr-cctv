@@ -59,7 +59,7 @@ services:
       - NVR_WORKER_MAX_BACKOFF_SECONDS=${NVR_WORKER_MAX_BACKOFF_SECONDS:-60}
       - NVR_WORKER_STOP_TIMEOUT_SECONDS=${NVR_WORKER_STOP_TIMEOUT_SECONDS:-10}
     volumes:
-      - ./recordings:/app/recordings
+      - recordings_data:/app/recordings
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
       interval: 30s
@@ -95,3 +95,6 @@ services:
     depends_on:
       saas-backend:
         condition: service_healthy
+
+volumes:
+  recordings_data:

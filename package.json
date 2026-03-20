@@ -10,6 +10,7 @@
         "build:frontend": "cd apps/frontend && bun run build",
         "build:backend": "cd apps/backend && go build -o ../bin/backend.exe .",
         "build:proxy": "cd apps/reverse-proxy && go build -o ../bin/reverse-proxy.exe .",
+        "check:deploy-config": "node scripts/check-deploy-config.js",
         "build": "bun run build:frontend && bun run build:backend && bun run build:proxy",
         "prod:backend": "cd apps/bin && backend.exe",
         "prod:proxy": "cd apps/bin && reverse-proxy.exe",
