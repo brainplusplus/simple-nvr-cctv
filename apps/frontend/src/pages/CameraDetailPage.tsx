@@ -190,7 +190,7 @@ const CameraDetailPage: React.FC = () => {
                                 autoPlay={true}
                                 muted={true}
                                 preferLowLatency={liveMode === 'low-latency'}
-                                allowFallback={liveMode !== 'low-latency'}
+                                allowFallback={true}
                                 onFallback={handleWebRTCFallback}
                                 emptyLabel={t('detail.live_empty')}
                                 errorLabel={t('detail.live_unavailable')}

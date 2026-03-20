@@ -24,17 +24,6 @@ const VidstackPlayer: React.FC<VidstackPlayerProps> = ({
 }) => {
     const playerRef = useRef<HTMLElement | null>(null);
 
-    const sourceType = useMemo(() => {
-        const normalised = src.toLowerCase();
-        if (normalised.includes('.m3u8')) {
-            return 'application/x-mpegurl';
-        }
-        if (normalised.includes('.mp4')) {
-            return 'video/mp4';
-        }
-        return undefined;
-    }, [src]);
-
     useEffect(() => {
         const player = playerRef.current;
         if (!player) {
@@ -83,7 +72,6 @@ const VidstackPlayer: React.FC<VidstackPlayerProps> = ({
             React.createElement(
                 'media-provider',
                 null,
-                React.createElement('source', { src, type: sourceType }),
                 poster ? React.createElement('media-poster', { alt: `${title} poster` }) : null,
             ),
             React.createElement('media-community-skin', null),
