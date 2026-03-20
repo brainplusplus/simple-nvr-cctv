@@ -77,6 +77,11 @@ func main() {
 		backendURL = "http://localhost:3001"
 	}
 
+	go2rtcURL := os.Getenv("GO2RTC_URL")
+	if go2rtcURL == "" {
+		go2rtcURL = "http://localhost:1984"
+	}
+
 	frontendURL := os.Getenv("FRONTEND_URL")
 	staticDir := os.Getenv("STATIC_DIR")
 	publicAPIURL := os.Getenv("PUBLIC_API_URL")
@@ -89,6 +94,12 @@ func main() {
 
 	// Create backend reverse proxy
 	backendProxy := httputil.NewSingleHostReverseProxy(backend)
+
+	go2rtcTarget, err := url.Parse(go2rtcURL)
+	if err != nil {
+		log.Fatalf("Invalid GO2RTC_URL: %v", err)
+	}
+	go2rtcProxy := httputil.NewSingleHostReverseProxy(go2rtcTarget)
 
 	// Determine frontend mode
 	var frontendHandler http.Handler
@@ -113,6 +124,11 @@ func main() {
 		backendProxy.ServeHTTP(w, r)
 	})
 
+	mux.HandleFunc("/go2rtc/", func(w http.ResponseWriter, r *http.Request) {
+		r.URL.Path = strings.TrimPrefix(r.URL.Path, "/go2rtc")
+		go2rtcProxy.ServeHTTP(w, r)
+	})
+
 	// Route everything else to frontend
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		frontendHandler.ServeHTTP(w, r)
@@ -120,6 +136,7 @@ func main() {
 
 	log.Printf("Reverse proxy starting on :%s", port)
 	log.Printf("  /api/* -> %s", backendURL)
+	log.Printf("  /go2rtc/* -> %s", go2rtcURL)
 	if staticDir != "" {
 		log.Printf("  /*     -> static files from %s", staticDir)
 	} else {
