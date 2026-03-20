@@ -24,17 +24,6 @@ const CameraDetailPage: React.FC = () => {
     const [snapshotVersion, setSnapshotVersion] = useState(0);
     const [liveMode, setLiveMode] = useState<'compatible' | 'low-latency'>('low-latency');
 
-    const pickDefaultRecording = useCallback((items: RecordingFile[]): RecordingFile | null => {
-        if (items.length === 0) {
-            return null;
-        }
-
-        const now = new Date();
-        const currentHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
-        const stableRecording = items.find((recording) => new Date(recording.timestamp) < currentHour);
-        return stableRecording ?? items[0] ?? null;
-    }, []);
-
     const load = useCallback(async () => {
         if (!id) return;
         setIsLoading(true);
@@ -42,13 +31,18 @@ const CameraDetailPage: React.FC = () => {
             const [cameraData, recordingData] = await Promise.all([camerasApi.get(id), camerasApi.listRecordings(id)]);
             setCamera(cameraData);
             setRecordings(recordingData);
-            setActiveRecording((current) => current ?? pickDefaultRecording(recordingData));
+            setActiveRecording((current) => {
+                if (!current) {
+                    return null;
+                }
+                return recordingData.find((recording) => recording.relative_path === current.relative_path) ?? null;
+            });
         } catch {
             error(t('messages.detail_failed'));
         } finally {
             setIsLoading(false);
         }
-    }, [error, id, pickDefaultRecording, t]);
+    }, [error, id, t]);
 
     useEffect(() => {
         load();
