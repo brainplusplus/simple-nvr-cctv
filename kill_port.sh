@@ -4,6 +4,9 @@
 BACKEND_PORT=3001
 FRONTEND_PORT=3002
 PROXY_PORT=7777
+RELAY_API_PORT=1984
+RELAY_RTSP_PORT=8554
+RELAY_WEBRTC_PORT=8555
 
 # Paths
 BACKEND_ENV="apps/backend/.env"
@@ -35,7 +38,7 @@ if [ -f "$PROXY_ENV" ]; then
     fi
 fi
 
-echo "Killing processes on ports: Frontend=$FRONTEND_PORT, Backend=$BACKEND_PORT, Proxy=$PROXY_PORT"
+echo "Killing processes on ports: Frontend=$FRONTEND_PORT, Backend=$BACKEND_PORT, Proxy=$PROXY_PORT, RelayAPI=$RELAY_API_PORT, RelayRTSP=$RELAY_RTSP_PORT, RelayWebRTC=$RELAY_WEBRTC_PORT"
 
 kill_port() {
     local port=$1
@@ -59,3 +62,7 @@ kill_port() {
 kill_port $FRONTEND_PORT
 kill_port $BACKEND_PORT
 kill_port $PROXY_PORT
+kill_port $RELAY_API_PORT
+kill_port $RELAY_RTSP_PORT
+kill_port $RELAY_WEBRTC_PORT
+pkill -f go2rtc 2>/dev/null || true

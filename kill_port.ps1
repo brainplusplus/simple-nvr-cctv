@@ -5,6 +5,9 @@ $proxyEnv = Join-Path $PSScriptRoot "apps\reverse-proxy\.env"
 $backendPort = 3001
 $frontendPort = 3002
 $proxyPort = 7777
+$relayApiPort = 1984
+$relayRtspPort = 8554
+$relayWebrtcPort = 8555
 
 function Get-PortFromEnv($envPath) {
     if (Test-Path $envPath) {
@@ -47,3 +50,7 @@ function Kill-Port($port) {
 Kill-Port $frontendPort
 Kill-Port $backendPort
 Kill-Port $proxyPort
+Kill-Port $relayApiPort
+Kill-Port $relayRtspPort
+Kill-Port $relayWebrtcPort
+Get-Process go2rtc -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue

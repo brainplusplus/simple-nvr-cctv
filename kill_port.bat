@@ -7,6 +7,9 @@ set PROXY_ENV=apps\reverse-proxy\.env
 set BACKEND_PORT=3001
 set FRONTEND_PORT=3002
 set PROXY_PORT=7777
+set RELAY_API_PORT=1984
+set RELAY_RTSP_PORT=8554
+set RELAY_WEBRTC_PORT=8555
 
 :: Read Backend Port
 if exist %BACKEND_ENV% (
@@ -29,11 +32,15 @@ if exist %PROXY_ENV% (
     )
 )
 
-echo Killing processes on ports: Frontend=!FRONTEND_PORT!, Backend=!BACKEND_PORT!, Proxy=!PROXY_PORT!
+echo Killing processes on ports: Frontend=!FRONTEND_PORT!, Backend=!BACKEND_PORT!, Proxy=!PROXY_PORT!, RelayAPI=!RELAY_API_PORT!, RelayRTSP=!RELAY_RTSP_PORT!, RelayWebRTC=!RELAY_WEBRTC_PORT!
 
 call :KillPort !FRONTEND_PORT!
 call :KillPort !BACKEND_PORT!
 call :KillPort !PROXY_PORT!
+call :KillPort !RELAY_API_PORT!
+call :KillPort !RELAY_RTSP_PORT!
+call :KillPort !RELAY_WEBRTC_PORT!
+taskkill /F /IM go2rtc.exe >nul 2>&1
 goto :eof
 
 :KillPort

@@ -99,6 +99,13 @@ Follow the prompts to configure:
 
 ### Development
 
+Running the full local stack with `bun run dev` now expects a local `go2rtc` binary to be available either:
+
+- in `tmp-go2rtc/go2rtc.exe` (Windows) / `tmp-go2rtc/go2rtc` (Unix), or
+- on your `PATH` as `go2rtc`
+
+The `dev` script now starts the relay, backend, frontend, and reverse proxy together.
+
 1. **Backend**:
    ```bash
    cd apps/backend
