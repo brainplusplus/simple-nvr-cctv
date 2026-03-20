@@ -96,4 +96,5 @@ Features: in-memory file cache with fsnotify watcher, runtime config injection (
 docker compose up --build
 ```
 
-Two services: `backend` (Go API, port 3001) + `proxy` (reverse proxy + static files, port 7777).
+Compose deployments persist CCTV footage in a named Docker volume mounted at `/app/recordings` inside the backend container.
+Three services: `go2rtc` (relay), `backend` (Go API, port 3001), and `proxy` (reverse proxy + static files, port 7777).

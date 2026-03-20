@@ -142,6 +142,11 @@ docker compose up --build
 
 Access at: http://localhost:7777
 
+The compose stack persists CCTV footage in the named Docker volume `recordings_data`, mounted into the backend at `/app/recordings`.
+For EasyPanel, attach persistent storage to the backend service at `/app/recordings` and keep `RECORDINGS_ROOT=/app/recordings`.
+If you previously stored footage with `./recordings:/app/recordings`, copy that data into the named volume before switching environments or the old files will not appear automatically.
+The backend runs as a non-root user in Docker, so the mounted storage must remain writable by the container user.
+
 ## API Endpoints
 
 | Method | Path | Auth | Description |

@@ -102,8 +102,10 @@
 
 | File | Purpose |
 |------|---------|
+| `Dockerfile.combined` | Root-level combined frontend + reverse-proxy production build |
 | `docker-compose.yml` | Service orchestration (`go2rtc`, backend, proxy) |
 | `.env.docker.example` | Docker environment template |
+| `scripts/check-deploy-config.js` | Regression check for Docker Go versions and recordings persistence wiring |
 | `.gitignore` | Git ignore rules |
 | `docs/plans/2026-03-19-nvr-mvp-design.md` | Approved sprint design artifact |
 | `docs/plans/2026-03-19-nvr-mvp-implementation.md` | Implementation handoff plan |
