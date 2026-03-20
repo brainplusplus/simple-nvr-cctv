@@ -258,6 +258,10 @@
             "id": "{{count}} rekaman berhasil dihapus.",
             "en": "{{count}} recordings deleted successfully."
         },
+        "delete_selected_skipped": {
+            "id": "{{count}} rekaman aktif sedang dipakai dan dilewati.",
+            "en": "{{count}} active recordings are currently in use and were skipped."
+        },
         "delete_selected_failed": {
             "id": "Gagal menghapus rekaman terpilih.",
             "en": "Failed to delete selected recordings."

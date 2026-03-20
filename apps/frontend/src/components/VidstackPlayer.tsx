@@ -70,6 +70,7 @@ const VidstackPlayer: React.FC<VidstackPlayerProps> = ({
             {
                 ref: playerRef,
                 title,
+                src,
                 poster,
                 autoplay: autoPlay ? '' : undefined,
                 muted: muted ? '' : undefined,
@@ -80,11 +81,11 @@ const VidstackPlayer: React.FC<VidstackPlayerProps> = ({
                 style: playerStyle,
             },
             React.createElement(
-                'media-outlet',
+                'media-provider',
                 null,
+                React.createElement('source', { src, type: sourceType }),
                 poster ? React.createElement('media-poster', { alt: `${title} poster` }) : null,
             ),
-            React.createElement('source', { src, type: sourceType }),
             React.createElement('media-community-skin', null),
         )
     );

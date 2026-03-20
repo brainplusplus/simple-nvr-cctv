@@ -80,21 +80,23 @@ const CameraDetailPage: React.FC = () => {
             return;
         }
 
-        const count = selectedRecordings.size;
         try {
-            await camerasApi.deleteRecordings(id, Array.from(selectedRecordings));
+            const result = await camerasApi.deleteRecordings(id, Array.from(selectedRecordings));
             if (activeRecording && selectedRecordings.has(activeRecording.relative_path)) {
                 setActiveRecording(null);
             }
             setSelectedRecordings(new Set());
             setShowDeleteModal(false);
             await load();
-            success(t('recordings.delete_selected_success', { count: String(count) }));
+            success(t('recordings.delete_selected_success', { count: String(result.deleted) }));
+            if ((result.skipped?.length ?? 0) > 0) {
+                warning(t('recordings.delete_selected_skipped', { count: String(result.skipped?.length ?? 0) }));
+            }
         } catch {
             error(t('recordings.delete_selected_failed'));
             return;
         }
-    }, [activeRecording, error, id, load, selectedRecordings, success, t]);
+    }, [activeRecording, error, id, load, selectedRecordings, success, t, warning]);
 
     const handleWebRTCFallback = useCallback(() => {
         if (liveMode !== 'low-latency') {
