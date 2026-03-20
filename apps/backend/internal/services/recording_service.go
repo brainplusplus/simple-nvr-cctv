@@ -46,6 +46,11 @@ type RecordingService struct {
 	live       map[string]*liveSession
 }
 
+type DeleteRecordingsResult struct {
+	Deleted int      `json:"deleted"`
+	Skipped []string `json:"skipped,omitempty"`
+}
+
 type cachedSnapshot struct {
 	result    models.SnapshotResult
 	expiresAt time.Time
@@ -149,12 +154,18 @@ func (s *RecordingService) OpenFile(ctx context.Context, cameraID, relativePath 
 	return file, info, fullPath, nil
 }
 
-func (s *RecordingService) Delete(ctx context.Context, cameraID string, relativePaths []string) (int, error) {
-	deleted := 0
+func (s *RecordingService) Delete(ctx context.Context, cameraID string, relativePaths []string) (DeleteRecordingsResult, error) {
+	result := DeleteRecordingsResult{}
+	currentHour := s.cfg.Now().UTC().Truncate(time.Hour)
 	for _, relativePath := range relativePaths {
 		clean, err := validateRelativeRecordingPath(relativePath)
 		if err != nil {
-			return deleted, err
+			return result, err
+		}
+
+		if parseRecordingTimestamp(clean, time.Time{}).Equal(currentHour) {
+			result.Skipped = append(result.Skipped, clean)
+			continue
 		}
 
 		fullPath := filepath.Join(s.cfg.RecordingsRoot, cameraID, filepath.FromSlash(clean))
@@ -162,12 +173,12 @@ func (s *RecordingService) Delete(ctx context.Context, cameraID string, relative
 			if errors.Is(err, os.ErrNotExist) {
 				continue
 			}
-			return deleted, err
+			return result, err
 		}
-		deleted++
+		result.Deleted++
 	}
 
-	return deleted, nil
+	return result, nil
 }
 
 func (s *RecordingService) GetSnapshot(ctx context.Context, cameraID string) (*models.SnapshotResult, error) {
