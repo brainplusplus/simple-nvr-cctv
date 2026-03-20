@@ -19,7 +19,7 @@ import (
 type RecordingServiceAPI interface {
 	List(ctx context.Context, cameraID string) ([]models.RecordingFile, error)
 	OpenFile(ctx context.Context, cameraID, relativePath string) (*os.File, fs.FileInfo, string, error)
-	Delete(ctx context.Context, cameraID string, relativePaths []string) (int, error)
+	Delete(ctx context.Context, cameraID string, relativePaths []string) (services.DeleteRecordingsResult, error)
 	GetSnapshot(ctx context.Context, cameraID string) (*models.SnapshotResult, error)
 	OpenLiveFile(ctx context.Context, cameraID, asset string) (*os.File, fs.FileInfo, string, string, error)
 	CreateWebRTCAnswer(ctx context.Context, cameraID string, offer services.WebRTCSessionDescription) (*services.WebRTCSessionDescription, error)
@@ -78,12 +78,12 @@ func (h *RecordingHandler) Delete(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "paths are required"})
 	}
 
-	deleted, err := h.service.Delete(ctx, cameraID, request.Paths)
+	result, err := h.service.Delete(ctx, cameraID, request.Paths)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, map[string]int{"deleted": deleted})
+	return c.JSON(http.StatusOK, result)
 }
 
 func (h *RecordingHandler) Snapshot(c echo.Context) error {

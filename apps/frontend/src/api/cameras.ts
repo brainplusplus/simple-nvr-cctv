@@ -56,6 +56,7 @@ export interface WebRTCSessionDescription {
 
 export interface DeleteRecordingsResponse {
     deleted: number;
+    skipped?: string[];
 }
 
 function getMediaToken(): string | null {
