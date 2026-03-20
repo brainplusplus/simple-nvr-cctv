@@ -181,6 +181,9 @@ Important NVR variables in `apps/backend/.env.example`:
 
 - `RECORDINGS_ROOT`: root folder for segmented recordings
 - `FFMPEG_BIN`: FFmpeg binary path or command name
+- `GO2RTC_API_URL`: go2rtc HTTP API base URL used to register camera relay streams
+- `GO2RTC_RTSP_URL`: go2rtc RTSP relay base URL used by recorder, snapshots, HLS, and WebRTC workers
+- `GO2RTC_STREAM_PREFIX`: prefix for generated relay stream names
 - `NVR_SEGMENT_SECONDS`: segment duration in seconds (default `3600` for hourly files)
 - `NVR_RETENTION_INTERVAL_SECONDS`: retention sweep interval
 - `NVR_HEALTH_STALE_SECONDS`: health timeout for stale workers/files
@@ -191,3 +194,18 @@ Important NVR variables in `apps/backend/.env.example`:
 - `NVR_WORKER_STOP_TIMEOUT_SECONDS`: graceful stop timeout before kill
 
 Recordings are stored under `recordings/{camera_id}/YYYY/MM/DD/*.mp4` by default.
+
+## Relay Streaming
+
+Live viewing and recording are designed to run through a relay stream instead of opening multiple direct RTSP sessions to the camera.
+
+Current relay integration uses `go2rtc`:
+
+- camera source is registered in go2rtc through its HTTP API
+- recorder consumes the go2rtc RTSP output, not the raw camera RTSP URL
+- snapshot, HLS, and WebRTC workers also consume the relay RTSP output
+- `docker-compose.yml` now starts a `go2rtc` service automatically for the Docker stack
+
+Recommended flow:
+
+`Camera (RTSP) -> go2rtc -> recorder/live workers -> React player`

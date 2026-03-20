@@ -4,7 +4,7 @@
 
 Semi-hexagonal architecture: layered backend (handlers → services → repositories) with a React SPA frontend, connected through a Go reverse proxy.
 
-The backend also hosts an RTSP NVR subsystem: PostgreSQL stores cameras and recording settings, an in-process Go supervisor spawns FFmpeg recorders for enabled cameras, recordings are written to disk, and authenticated APIs expose snapshots, recording metadata, and playback.
+The backend also hosts an RTSP NVR subsystem: PostgreSQL stores cameras and recording settings, a go2rtc relay fan-outs each camera stream, an in-process Go supervisor spawns FFmpeg recorders against the relay output, recordings are written to disk, and authenticated APIs expose snapshots, recording metadata, and playback.
 
 ## Backend Architecture
 
@@ -40,11 +40,11 @@ main.go → routes.go (DI wiring) → handlers → services → repositories →
 ### NVR Flow
 
 1. Camera and recording settings are stored in PostgreSQL.
-2. On startup, enabled cameras are resumed by the recorder supervisor.
-3. Each enabled camera runs one FFmpeg process using segmented MP4 output.
+2. On startup, enabled cameras are registered into go2rtc and resumed by the recorder supervisor.
+3. Each enabled camera uses the go2rtc RTSP relay output as the source for recording/live FFmpeg workers.
 4. Recordings are written under `recordings/{camera_id}/YYYY/MM/DD/*.mp4`.
 5. Retention runs on a configurable Go ticker and prunes by age or total camera folder size.
-6. The backend serves recording metadata, MP4 playback, and cached/on-demand snapshots.
+6. The backend serves recording metadata, MP4 playback, and snapshots while live workers source media from the relay instead of the raw camera URL.
 
 ### Authentication Flow
 

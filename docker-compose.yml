@@ -1,4 +1,12 @@
 services:
+  go2rtc:
+    image: alexxit/go2rtc:latest
+    restart: unless-stopped
+    expose:
+      - "1984"
+      - "8554"
+      - "8555"
+
   # Backend API Service
   saas-backend:
     build:
@@ -39,6 +47,9 @@ services:
       - PHONE_COUNTRY_CODE_DEFAULT=${PHONE_COUNTRY_CODE_DEFAULT:-62}
       - RECORDINGS_ROOT=${RECORDINGS_ROOT:-/app/recordings}
       - FFMPEG_BIN=${FFMPEG_BIN:-ffmpeg}
+      - GO2RTC_API_URL=${GO2RTC_API_URL:-http://go2rtc:1984}
+      - GO2RTC_RTSP_URL=${GO2RTC_RTSP_URL:-rtsp://go2rtc:8554}
+      - GO2RTC_STREAM_PREFIX=${GO2RTC_STREAM_PREFIX:-camera_}
       - NVR_SEGMENT_SECONDS=${NVR_SEGMENT_SECONDS:-3600}
       - NVR_RETENTION_INTERVAL_SECONDS=${NVR_RETENTION_INTERVAL_SECONDS:-300}
       - NVR_HEALTH_STALE_SECONDS=${NVR_HEALTH_STALE_SECONDS:-600}
@@ -55,7 +66,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
-    depends_on: []
+    depends_on:
+      - go2rtc
 
   # Combined Reverse Proxy + Frontend Service (no nginx needed)
   saas-rus-proxy:

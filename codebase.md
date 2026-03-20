@@ -32,6 +32,7 @@
 | `internal/services/table_setting_service.go` | TableSetting service |
 | `internal/services/background_job_service.go` | BackgroundJob service |
 | `internal/services/camera_service.go` | Camera CRUD + runtime orchestration |
+| `internal/services/relay_service.go` | go2rtc relay registration and RTSP relay URL generation |
 | `internal/services/recorder_supervisor.go` | FFmpeg worker lifecycle and restart backoff |
 | `internal/services/retention_service.go` | Delete-by-days and delete-by-size retention logic |
 | `internal/services/recording_service.go` | Recording listing, file serving, and snapshot capture/cache |
@@ -101,7 +102,7 @@
 
 | File | Purpose |
 |------|---------|
-| `docker-compose.yml` | Service orchestration |
+| `docker-compose.yml` | Service orchestration (`go2rtc`, backend, proxy) |
 | `.env.docker.example` | Docker environment template |
 | `.gitignore` | Git ignore rules |
 | `docs/plans/2026-03-19-nvr-mvp-design.md` | Approved sprint design artifact |
