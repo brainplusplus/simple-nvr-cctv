@@ -205,6 +205,7 @@ Current relay integration uses `go2rtc`:
 - recorder consumes the go2rtc RTSP output, not the raw camera RTSP URL
 - snapshot, HLS, and WebRTC workers also consume the relay RTSP output
 - `docker-compose.yml` now starts a `go2rtc` service automatically for the Docker stack
+- the reverse proxy exposes go2rtc endpoints under `/go2rtc/*` so the frontend can consume native relay HLS/WebRTC endpoints directly
 
 Recommended flow:
 

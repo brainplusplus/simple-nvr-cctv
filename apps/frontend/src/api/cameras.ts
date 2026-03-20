@@ -82,6 +82,14 @@ export function appendMediaToken(url: string, params?: Record<string, string | n
     return nextQuery ? `${path}?${nextQuery}` : path;
 }
 
+function relayStreamName(cameraId: string): string {
+    return `camera_${cameraId}`;
+}
+
+function browserRelayStreamName(cameraId: string): string {
+    return `${relayStreamName(cameraId)}_browser`;
+}
+
 export const camerasApi = {
     list: async (): Promise<CameraResponse[]> => {
         const response = await client.get<CameraResponse[]>('/api/cameras');
@@ -122,12 +130,12 @@ export const camerasApi = {
     },
 
     createWebRTCAnswer: async (cameraId: string, offer: WebRTCSessionDescription): Promise<WebRTCSessionDescription> => {
-        const response = await client.post<WebRTCSessionDescription>(`/api/cameras/${cameraId}/webrtc/offer`, offer);
+        const response = await client.post<WebRTCSessionDescription>(`/go2rtc/api/webrtc?src=${browserRelayStreamName(cameraId)}`, offer);
         return response.data;
     },
 
     getSnapshotUrl: (cameraId: string, version?: number): string => appendMediaToken(`/api/cameras/${cameraId}/snapshot`, version === undefined ? undefined : { v: version }),
-    getLivePlaylistUrl: (cameraId: string): string => appendMediaToken(`/api/cameras/${cameraId}/live/index.m3u8`),
+    getLivePlaylistUrl: (cameraId: string): string => `/go2rtc/api/stream.m3u8?src=${browserRelayStreamName(cameraId)}&mp4`,
     getPlaybackUrl: (url: string): string => appendMediaToken(url),
 };
 
